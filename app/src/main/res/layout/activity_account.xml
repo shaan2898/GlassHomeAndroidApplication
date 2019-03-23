@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".AccountActivity">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></android.support.v7.widget.Toolbar>
+
+
+    <TextView
+        android:id="@+id/Account1"
+        android:layout_width="177dp"
+        android:layout_height="50dp"
+        android:text="Dashboard"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.056" />
+
+    <TextView
+        android:id="@+id/DoorIDText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Front Door"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.248" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="78dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginEnd="66dp"
+        android:layout_marginBottom="390dp"
+        android:background="@color/colorPrimary"
+        android:text="..."
+        android:textAlignment="center"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/garageOpen"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DoorIDText"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/airQualityText"
+        android:layout_width="121dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Air Quality"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.429" />
+
+    <TextView
+        android:id="@+id/airDataText"
+        android:layout_width="75dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginEnd="253dp"
+        android:layout_marginBottom="6dp"
+        android:text="..."
+        android:textAlignment="center"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.498" />
+
+    <TextView
+        android:id="@+id/garageOpen"
+        android:layout_width="144dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Garage Door"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.858"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.249" />
+
+    <TextView
+        android:id="@+id/garageText"
+        android:layout_width="75dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="123dp"
+        android:layout_marginEnd="91dp"
+        android:layout_marginBottom="282dp"
+        android:text="..."
+        android:textAlignment="center"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/lockSwitch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toBottomOf="@+id/garageOpen"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Switch
+        android:id="@+id/lockSwitch"
+        android:layout_width="174dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="484dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="17dp"
+        android:text="Lock Mode"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:theme="@style/SwitchTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.527"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+  <item
+
+      android:id="@+id/dashboard"
+      android:title="Dashboard"
+      />
+  <item
+
+      android:id="@+id/map"
+      android:title="Map"
+    />
+  <item
+
+      android:id="@+id/AccountSettings"
+      android:title="Account Settings"
+
+      />
+  <item
+      android:id="@+id/sensorSettings"
+      android:title="Sensor Settings"
+      />
+
+  <item
+
+      android:id="@+id/menuLogout"
+      android:title="Logout"
+
+      />
+
+
+
+
+</menu>
