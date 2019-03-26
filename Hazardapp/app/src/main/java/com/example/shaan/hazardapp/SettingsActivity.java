@@ -40,14 +40,14 @@ public class SettingsActivity extends AppCompatActivity {
 
                 //If notification button is checked On
                 if(isChecked){
-
+                    Toast.makeText(SettingsActivity.this, "Notifications Turned On", Toast.LENGTH_LONG).show();
                 }
                 else{
-
+                    Toast.makeText(SettingsActivity.this, "Notifications Turned Off", Toast.LENGTH_LONG).show();
                 }
 
                 //Display "Notification Settings Changed" when switching toggle button
-                Toast.makeText(SettingsActivity.this, "Notification Settings Changed", Toast.LENGTH_LONG).show();
+
 
             }
         });
