@@ -66,6 +66,13 @@ public class AccountActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        DoorIDText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AccountActivity.this, frontDoorSensor.class));
+            }
+        });
+
         //switch operations
         lockMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -150,6 +157,7 @@ public class AccountActivity extends AppCompatActivity {
 
 
 
+
     //for dooropen realtime data DONT CHANGE
         myRef.child("dooropen").addValueEventListener(new ValueEventListener() {
             @Override
@@ -187,13 +195,21 @@ public class AccountActivity extends AppCompatActivity {
 
                 switch(val){
                     case 0:
-                        airDataText.setText("0");
+                        airDataText.setText("Safe");
                         break;
                     case 1:
-                        airDataText.setText("1");
+                        airDataText.setText("UNSAFE");
+                        Toast.makeText(AccountActivity.this,"Gas Detected. Not Deadly. Please Check As Soon as Possible.", Toast.LENGTH_LONG).show();
                         break;
                     case 2:
-                        airDataText.setText("2");
+                        airDataText.setText("UNSAFE");
+                        Toast.makeText(AccountActivity.this,"Harmful Gas Detected. Please Check ASAP, Can Cause EMERGENCY.", Toast.LENGTH_LONG).show();
+
+                        break;
+                    case 3:
+                        airDataText.setText("UNSAFE");
+                        Toast.makeText(AccountActivity.this,"Gas has reached deadly levels. LEAVE HOME ASAP.", Toast.LENGTH_LONG).show();
+
                         break;
                 }
 
