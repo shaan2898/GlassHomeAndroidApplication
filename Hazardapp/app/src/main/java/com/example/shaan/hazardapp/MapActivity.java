@@ -6,6 +6,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -14,28 +16,52 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+
+import org.w3c.dom.Text;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+//    @Override
+//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+//
+//    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -63,28 +89,41 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
            // mMap.getUiSettings().setMyLocationButtonEnabled(false); //will remove the set my location button
             mMap.getUiSettings().isCompassEnabled();
             mMap.getUiSettings().isZoomGesturesEnabled();
+            init();
         }
 
 
     }
 
+
+    //constants
     private static final Integer ERROR_DIALOG_REQUEST = 9001;
     private static final String TAG = "MapActivity";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final Integer LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-40, -168), new LatLng(71,136));
+
+    //widgets
+    private AutoCompleteTextView mSearchText;
+    private ImageView mGps;
 
     //vars
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap; //the actual map
     private FusedLocationProviderClient mFusedLocationProviderClient; //get device location
+//    private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
+    private GoogleApiClient mGoogleApiClient;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
+        mGps = (ImageView) findViewById(R.id.ic_gps);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -93,6 +132,73 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
       getLocationPermission();
 
 
+
+    }
+
+    private void init(){
+        Log.d(TAG, "init: initializing");
+            //this is the google places api client need to pass into PlaceAutocompleteAdapter
+        //got the place auto complete adapter java class from github
+        //it enables search options below while typing by guessing what youre typing
+//        mGoogleApiClient = new GoogleApiClient.Builder(this).addApi(Places.GEO_DATA_API).addApi(Places.PLACE_DETECTION_API)
+//                .enableAutoManage(this, this)
+//                .build();
+//        mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient, LAT_LNG_BOUNDS, null);
+//
+//        mSearchText.setAdapter(mPlaceAutocompleteAdapter); //sets this in motion so a drop down list pops up when searching
+
+        //when you click return on keyboard, this will search instead of just going to next line
+        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
+                        || event.getAction() == event.ACTION_DOWN
+                        || event.getAction() == event.KEYCODE_ENTER){
+                    //execute our method for searching
+                    geoLocate(); //call geoLocate, it will locate the search string youre entering
+                }
+
+                return false;
+            }
+        });
+
+        mGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //clicked gps icon
+                Log.d(TAG, "onClick: clicked gps icon");
+                getDeviceLocation();
+            }
+        });
+        //hideSoftKeyboard();
+    }
+
+    private void geoLocate(){
+        Log.d(TAG,"geoLocate: geolocating");
+
+        String searchString = mSearchText.getText().toString();
+
+        Geocoder geocoder = new Geocoder(MapActivity.this);
+        //create list of address results from searching
+        List<Address> listAddy = new ArrayList<>();
+        try{
+            listAddy = geocoder.getFromLocationName(searchString,1); //get the addresses that are searched/shown
+        }catch(IOException e){
+            Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
+        }
+
+        if(listAddy.size() > 0){ //if we have a list of addresses
+            Address address = listAddy.get(0);
+            //this above finds all the info, we need to pick the info to use (latitude, longitude) of what location user searched
+            Log.d(TAG, "geoLocate: found a location: " + address.toString());
+
+            //create objects for new lat and long so that its not null pointer
+            double searchLat = address.getLatitude();
+            double searchLon = address.getLongitude();
+            LatLng corSearch =  new LatLng(searchLat,searchLon);
+            moveCamera(corSearch, DEFAULT_ZOOM, address.getAddressLine(0)); //move camera to searched/found location
+
+        }
     }
 
      private void getDeviceLocation(){
@@ -117,7 +223,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             LatLng cor =  new LatLng(latitude,longitude);
 
                         //pass current lat and long into moveCamera function, and also zoom Default frames in, found in declaration
-                            moveCamera(cor, DEFAULT_ZOOM);
+                            moveCamera(cor, DEFAULT_ZOOM, "My Location");
                         }
                         else{
                             Log.d(TAG, "onComplete: current location is null");
@@ -135,10 +241,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
      //move the map camera to user location\
-    private void moveCamera(LatLng latLng, float zoom){
+    private void moveCamera(LatLng latLng, float zoom, String title){
 
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+        if(title != "My Location"){ //if we aren't on our current location and are searching for something else
+            //drop a pin on where cameram moves
+            MarkerOptions options = new MarkerOptions().position(latLng).title(title);
+            mMap.addMarker(options);
+        }
+
+      //  hideSoftKeyboard();
 
     }
 
@@ -268,6 +382,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
         return true;
+    }
+
+
+    private void hideSoftKeyboard(){
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
 
