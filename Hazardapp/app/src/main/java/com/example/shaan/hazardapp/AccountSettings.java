@@ -58,7 +58,7 @@ public class AccountSettings extends AppCompatActivity {
                 startActivity(new Intent(this, MainActivity.class));
                 break;
 
-            case R.id.sensorSettings:
+            case R.id.Settings:
 
                 startActivity(new Intent(this,SettingsActivity.class ));
                 break;
