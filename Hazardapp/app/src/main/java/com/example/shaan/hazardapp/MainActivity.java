@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         clickHere = (TextView) findViewById(R.id.clickHere);
 
         SignInButton = (Button) findViewById(R.id.SignInButton);
-      //  forgotPasswordText = (Button) findViewById(R.id.forgotPasswordText);
+
 
         //Firebase Authentication, when entering username/password it will get current user and if found, take them to Account Activity
 
@@ -89,12 +89,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        forgotPasswordText.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this, ResetPassword.class));
-//            }
-//        });
     }
 
     @Override
